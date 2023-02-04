@@ -36,6 +36,9 @@ const NavbarComp = () => {
                 >
                   dashboard
                 </Navbar.Brand>
+                <Link href="/addlamp" passHref>
+                  <Navbar.Brand>Add Lamp</Navbar.Brand>
+                </Link>
               </div>
             ) : (
               <>

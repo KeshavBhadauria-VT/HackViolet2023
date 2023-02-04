@@ -1,23 +1,19 @@
 import React, { useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
-import { useAuth } from '../context/AuthContext'
-import { addNewUser } from '../config/firebase'
 
-const Signup = () => {
-  const { user, signup } = useAuth()
-  console.log(user)
+const NewLamp = () => {
   const [data, setData] = useState({
-    email: '',
-    password: '',
+    device: '',
+    model: '',
   })
 
-  const handleSignup = async (e: any) => {
+  const handleNewLamp = async (e: any) => {
     e.preventDefault()
 
     try {
-      await signup(data.email, data.password)
-      //TODO: create database user 
-      addNewUser(data.email, data.password)
+      await (data.device, data.model)
+      //TODO: create database lamp 
+    //   addNewLamp(data.device, data.model)
       //
     } catch (err) {
       console.log(err)
@@ -33,37 +29,37 @@ const Signup = () => {
         margin: 'auto',
       }}
     >
-      <h1 className="text-center my-3 ">Signup</h1>
-      <Form onSubmit={handleSignup}>
+      <h1 className="text-center my-3 ">Add New Lamp</h1>
+      <Form onSubmit={handleNewLamp}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
-          <Form.Label>Email address</Form.Label>
+          <Form.Label>Device ID</Form.Label>
           <Form.Control
-            type="email"
-            placeholder="Enter email"
+            type="text"
+            placeholder="Enter Goove device ID"
             required
             onChange={(e: any) =>
               setData({
                 ...data,
-                email: e.target.value,
+                device: e.target.value,
               })
             }
-            value={data.email}
+            value={data.device}
           />
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
-            type="password"
-            placeholder="Password"
+            type="text"
+            placeholder="Enter Goove model"
             required
             onChange={(e: any) =>
               setData({
                 ...data,
-                password: e.target.value,
+                model: e.target.value,
               })
             }
-            value={data.password}
+            value={data.model}
           />
         </Form.Group>
 
@@ -75,4 +71,4 @@ const Signup = () => {
   )
 }
 
-export default Signup
+export default NewLamp;
