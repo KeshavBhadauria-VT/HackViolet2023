@@ -2,9 +2,7 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css';
 import axios from 'axios'
 import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
 
-const socket = io("http://127.0.0.1:8000");
 
 const govee_key = 'a1cc86f4-4677-42c6-b2c9-5d405d8997a5'
 
@@ -24,7 +22,6 @@ const handleClickOn = () => {
   axios.put('https://developer-api.govee.com/v1/devices/control', payload, { headers })
     .then(response => console.log(response.data));
   // change a univerasl state that python script can acsess to tell it the curr state of lamp
-  socket.emit('on', {'status':1})
   console.log("ON");
 }
 
@@ -44,7 +41,6 @@ const handleClickOff = () => {
   axios.put('https://developer-api.govee.com/v1/devices/control', payload, { headers })
     .then(response => console.log(response.data));
     // change a univerasl state that python script can acsess to tell it the curr state of lamp
-  socket.emit('off', {'status':0})
   console.log("OFF");
 }
 
@@ -71,28 +67,8 @@ const handleClickOffForNight = () => {
 }
 
 export default function Home() {
-  const [isConnected, setIsConnected] = useState(socket.connected);
   const [lastPong, setLastPong] = useState(null);
 
-  useEffect(() => {
-    socket.on('connect', () => {
-      setIsConnected(true);
-    });
-
-    socket.on('disconnect', () => {
-      setIsConnected(false);
-    });
-
-    socket.on('pong', () => {
-      setLastPong(new Date().toISOString());
-    });
-
-    return () => {
-      socket.off('connect');
-      socket.off('disconnect');
-      socket.off('pong');
-    };
-  }, []);
 
   return (
     <div className={styles.container}>
