@@ -9,6 +9,21 @@ to run the flask server:
     then do
     ```python3 server.py```
 
+
+to build the front end, you will probably need nextjs
+so....
+
+    ```npm i next```
+    ```npm run build```
+    ONLY DO THESE THINGS ONCE
+
+    
+now to run it
+
+    ```npm run start```
+
+
+
     
 
 
