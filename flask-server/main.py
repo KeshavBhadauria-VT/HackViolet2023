@@ -1,32 +1,32 @@
 from pyicloud import PyiCloudService
 import getpass
-from config import icloud_pass, govee_key
+from config import govee_key
 from math import radians, cos, sin, asin, sqrt
 import datetime
 import requests
 import json
 import asyncio
-import socketio
+# import socketio
 import time
 
-sio = socketio.AsyncClient()
+# sio = socketio.AsyncClient()
 
 status = 0
 
-@sio.on('statusChange')
-async def statusChange(data):
-    global status
-    status = data['status']
-    print('the lamp has been turned ' + str(status))
+# @sio.on('statusChange')
+# async def statusChange(data):
+#     global status
+#     status = data['status']
+#     print('the lamp has been turned ' + str(status))
 
-@sio.event
-async def connect():
-    print('****************connected********************')
+# @sio.event
+# async def connect():
+#     print('****************connected********************')
 
 
-@sio.event
-async def disconnect():
-    print('****************disconnected********************')
+# @sio.event
+# async def disconnect():
+#     print('****************disconnected********************')
 
 
 
@@ -55,12 +55,12 @@ def distance(lat1, lat2, lon1, lon2):
 async def main():
     await sio.connect("http://127.0.0.1:8000")
     # await sio.wait()
-    await sio.start_background_task(sstuff)
+    await sio.start_background_task(stuff)
 
     # await sio.wait()
     # await sio.call('ping', {})
 
-async def sstuff():
+def sstuff():
     # print('hello');
 
     while True:
@@ -68,11 +68,11 @@ async def sstuff():
         print('hello');
 
 
-async def stuff():
+def stuff():
     # email = input('Email: ')
-    # password = getpass.getpass("Password: ")
+    password = getpass.getpass("Password: ")
 
-    api = PyiCloudService('sakethraj122@gmail.com', icloud_pass)
+    api = PyiCloudService('sakethraj122@gmail.com', password)
 
     global status
 
@@ -149,5 +149,6 @@ async def stuff():
 
 
 
-asyncio.run(main())
+# asyncio.run(main())
+stuff()
 

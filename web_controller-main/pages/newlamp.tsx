@@ -1,19 +1,29 @@
 import React, { useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
+import { addNewLamp } from '../config/firebase'
+import { useAuth } from '../context/AuthContext'
+
 
 const NewLamp = () => {
+
+  const { user, logout } = useAuth();
   const [data, setData] = useState({
     device: '',
     model: '',
+    name: '',
   })
 
   const handleNewLamp = async (e: any) => {
     e.preventDefault()
 
     try {
-      await (data.device, data.model)
+      //data.device, data.model, data.name
+      // console.log(user);
+      addNewLamp(data.device, data.model, data.name, user.email);
+
+
       //TODO: create database lamp 
-    //   addNewLamp(data.device, data.model)
+      //   addNewLamp(data.device, data.model)
       //
     } catch (err) {
       console.log(err)
@@ -48,7 +58,7 @@ const NewLamp = () => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
+          <Form.Label>Model</Form.Label>
           <Form.Control
             type="text"
             placeholder="Enter Goove model"
@@ -62,6 +72,23 @@ const NewLamp = () => {
             value={data.model}
           />
         </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Enter Name"
+            required
+            onChange={(e: any) =>
+              setData({
+                ...data,
+                name: e.target.value,
+              })
+            }
+            value={data.name}
+          />
+        </Form.Group>
+
 
         <Button variant="primary" type="submit">
           Signup

@@ -9,6 +9,7 @@ const Signup = () => {
   const [data, setData] = useState({
     email: '',
     password: '',
+    imageLink: '',
   })
 
   const handleSignup = async (e: any) => {
@@ -17,7 +18,7 @@ const Signup = () => {
     try {
       await signup(data.email, data.password)
       //TODO: create database user 
-      addNewUser(data.email, data.password)
+      addNewUser(data.email.split("@")[0], data.email, data.imageLink)
       //
     } catch (err) {
       console.log(err)
@@ -64,6 +65,21 @@ const Signup = () => {
               })
             }
             value={data.password}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="formBasicImage">
+          <Form.Label>Image link address</Form.Label>
+          <Form.Control
+            type="url"
+            placeholder="IMAGE LINK"
+            onChange={(e: any) =>
+              setData({
+                ...data,
+                imageLink: e.target.value,
+              })
+            }
+            value={data.imageLink}
           />
         </Form.Group>
 

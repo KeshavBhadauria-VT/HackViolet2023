@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@babel/compat-data": "^7.20.14",
     "axios": "^1.2.2",
     "bootstrap": "^5.2.3",
     "chart.js": "^4.2.0",
@@ -19,9 +20,14 @@
     "react-dom": "18.2.0",
     "react-firebase-hooks": "^5.1.1",
     "socket.io": "^4.5.4",
-    "socket.io-client": "^4.5.4"
+    "socket.io-client": "^4.5.4",
+    "styled-components": "^5.3.6"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
+    "babel-plugin-macros": "^3.1.0",
+    "babel-plugin-styled-components": "^2.0.7",
+    "faker": "^5.5.3",
     "typescript": "4.9.5"
   }
 }

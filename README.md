@@ -13,6 +13,7 @@ to run the flask server:
 to build the front end, you will probably need nextjs
 so....
 
+    IN THE WEB_CONTROLLER DIRECTORY
     ```npm i next```
     ```npm run build```
     ONLY DO THESE THINGS ONCE
