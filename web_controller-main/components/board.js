@@ -1,58 +1,57 @@
-import React, { useState } from 'react'
-import Profiles from './profiles';
-import { Leaderboard } from './database';
-
-import {Container, Cotainer} from "react-bootstrap"
+import React, { useEffect, useState } from "react";
+import Profiles from "./profiles";
+import { Leaderboard } from "./database";
+import { db } from "../config/firebase";
+import { Container, Cotainer } from "react-bootstrap";
+import { getDocs, collection, Firestore } from "firebase/firestore";
 
 export default function Board() {
+  const [loading, setloading] = useState(true);
+  const [users, setUsers] = useState();
 
-    const [period, setPeriod] = useState(0);
+  useEffect(() => {
+    const getUsers = [];
+    async function pleaseWork() {
+      const querySnapshot = await getDocs(collection(db, "users"));
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        getUsers.push(doc.data());
+      });
 
-  const handleClick = (e) => {
-     
-    setPeriod(e.target.dataset.id)
+      setUsers(getUsers);
+      setloading(false);
+    }
+    pleaseWork();    
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
   return (
     <div className="board">
-        <h1 className='leaderboard'>Leaderboard</h1>
-
-        <div className="duration">
-            <button onClick={handleClick} data-id='7'>7 Days</button>
-            <button onClick={handleClick} data-id='30'>30 Days</button>
-            <button onClick={handleClick} data-id='0'>All-Time</button>
-        </div>
-
-        
-        <Container>
-
-        <Profiles Leaderboard={between(Leaderboard, period)}></Profiles>
-        </Container>
-
+      <h1 className="leaderboard">Users!</h1>
+      {users && (
+      <Container>
+        <Profiles Leaderboard={users}></Profiles>
+      </Container>
+      )
+    }
     </div>
-  )
+  );
 }
 
+async function between(data) {
+  // const today = new Date();
+  // const previous = new Date(today);
+  // previous.setDate(previous.getDate() - (between + 1));
 
+  // let filter = data.filter(val => {
+  //     let userDate = new Date(val.dt);
+  //     if (between == 0) return val;
+  //     return previous <= userDate && today >= userDate;
+  // })
 
-function between(data, between){
-    const today = new Date();
-    const previous = new Date(today);
-    previous.setDate(previous.getDate() - (between + 1));
-
-    let filter = data.filter(val => {
-        let userDate = new Date(val.dt);
-        if (between == 0) return val;
-        return previous <= userDate && today >= userDate;
-    })
-
-    // sort with asending order
-    return filter.sort((a, b) => {
-        if ( a.score === b.score){
-            return b.score - a.score;
-        } else{
-            return b.score - a.score;
-        }
-    })
-
+  // sort with asending order
+  
 }

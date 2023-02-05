@@ -32,6 +32,7 @@ export const db = getFirestore(app);
 
 
 
+
 export const addNewUser = async(name, email, imageLink) => {
   console.log("adding new user")
 

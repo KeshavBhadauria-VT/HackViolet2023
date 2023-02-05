@@ -4,7 +4,7 @@ import styles from '../styles/profile.module.css'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { db } from '../config/firebase';
-import { doc, getDoc, collection } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs, setDoc } from "firebase/firestore";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -56,7 +56,7 @@ const RenderCard = (props) => {
         </div>
     )
 
-} 
+}
 
 const Profile = () => {
 
@@ -79,6 +79,16 @@ const Profile = () => {
 
         async function fetchFriends() {
             await fetchUser();
+
+
+            // const querySnapshot = await getDocs(collection(db, "users"));
+
+            // querySnapshot.forEach((current) => {
+            //     // doc.data() is never undefined for query doc snapshots
+            //     const ref = doc(db, 'users', current.id);
+            //     setDoc(ref, {carbon: Math.random() * 100}, {merge:true});
+            // });
+
             // const todoRef = await getDoc(userRef["Friends"][0]);
             // console.log(userRef["Friends"][0].id);
 
@@ -142,7 +152,7 @@ const Profile = () => {
                         {
                             userRef["Friends"][0] && (
 
-                                
+
                                 <div className='row justify-content-center'>
                                     {
                                         userRef["Friends"].map((friend, index) => {
