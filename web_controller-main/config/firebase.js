@@ -55,7 +55,7 @@ export const addNewLamp = async(id, model, name, user) => {
   console.log("adding new lamp to....");
 
   const lampRef = doc(db, 'switches', id);
-  setDoc(lampRef, {Model: model, Name: name, State: "off"}, {merge: true});
+  setDoc(lampRef, {Model: model, Name: name, State: "off", lamp_ref_id: id, carbon: Math.random() * 10}, {merge: true});
 
   const userRef = doc(db, "users", user);
 

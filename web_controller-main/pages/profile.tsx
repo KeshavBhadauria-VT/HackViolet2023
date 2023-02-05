@@ -63,6 +63,24 @@ const RenderCard = (props) => {
 }
 
 export const Profile = (props) => {
+    const plugins = [{
+        beforeDraw: function(chart) {
+         var width = chart.width,
+             height = chart.height,
+             ctx = chart.ctx;
+             ctx.restore();
+             var fontSize = (height / 160).toFixed(2);
+             ctx.font = fontSize + "em sans-serif";
+             ctx.textBaseline = "top";
+             var text = "52lb ",
+             textX = Math.round((width - ctx.measureText(text).width) / 2),
+             textY = height / 2;
+             ctx.fillText(text, textX, textY);
+             ctx.save();
+        } 
+      }]
+   
+
     const { user, logout } = useAuth()
 
     const handleFriendAdd = async (e: any) => {
@@ -172,7 +190,7 @@ export const Profile = (props) => {
                     <div className="container pt-5 pd-0" style={{ height: 700 }}>
                         <div className='row justify-content-center'>
                             <div className='col-6 '>
-                                <Doughnut data={data} />
+                                <Doughnut data={data} plugins={plugins} />
                             </div>
                         </div>
 
@@ -204,7 +222,7 @@ export const Profile = (props) => {
                         }
                         {
                             !userRef["Friends"][0] && (
-                                <h3>loading......</h3>
+                                <h3>Make sure to add some friends if you get the chance!</h3>
                             )
                         }
                     </div>

@@ -11,6 +11,7 @@ const NewLamp = () => {
     device: '',
     model: '',
     name: '',
+    carbon: 0
   })
 
   const handleNewLamp = async (e: any) => {

@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Container, Form } from 'react-bootstrap'
-
+import { handleClickOn } from './index.js';
+import { db } from '../config/firebase.js';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -12,6 +13,10 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import faker from 'faker';
+import { doc, getDoc, collection, getDocs, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import { useAuth } from '../context/AuthContext'
+
+
 
 ChartJS.register(
     CategoryScale,
@@ -56,6 +61,75 @@ export const data = {
 
 const Dashboard = () => {
 
+    const { user, logout } = useAuth()
+
+    const [loading, setloading] = useState(true);
+    const [switches, setSwitches] = useState();
+    const [userRef, setUserRef] = useState(null);
+
+    useEffect(() => {
+        const getSwitches = [];
+        async function pleaseWork() {
+            const betterName = doc(db, "users", user.email);
+            const docSnap = await getDoc(betterName);
+
+            setUserRef(docSnap.data());
+        }
+        pleaseWork().then(() => {
+            setloading(false)
+        });
+    }, []);
+
+
+    const Row = (props) => {
+        const [switchesRef, setSwitchesRef] = useState();
+        console.log(props.id);
+        // model={plug["Model"]} name={plug["Name"]} state={plug["State"]}
+        
+        useEffect(() => {
+            async function fetchSwitches() {
+                const switchDocRef = doc(db, "switches", props.id);
+                const docSnap = await getDoc(switchDocRef);
+                setSwitchesRef(docSnap.data());
+            }
+            fetchSwitches();
+        }, [])
+
+        if (!switchesRef) {
+            return <div>loading....</div>;
+        }
+
+        return (
+            <>
+                <th scope="row">{switchesRef["lamp_ref_id"]}</th>
+                <td>{switchesRef["Model"]}</td>
+                <td>
+                    <Form>
+                        <Form.Check
+                            onChange={handleClickOn}
+                            value={switchesRef["lamp_ref_id"]}
+                            type="switch"
+                            id="custom-switch"
+                            label="Check this switch"
+                        />
+                    </Form>
+                </td>
+                <td>
+
+                    <div className="form-group">
+                        <input type="range" className="form-control-range" id="formControlRange" />
+                    </div>
+                </td>
+            </>
+
+
+        )
+
+    }
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="container py-4">
@@ -72,61 +146,24 @@ const Dashboard = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>
-                            <Form>
-                                <Form.Check
-                                    type="switch"
-                                    id="custom-switch"
-                                    label="Check this switch"
-                                />
-                            </Form>
-                        </td>
-                        <td>
+                    {
+                        userRef["Plugs"][0] && (
+                            <tr>
+                                {
+                                    userRef["Plugs"].map((plug, index) => {
+                                        
+                                        return (
+                                            <Row key={index} id={plug.id}>
 
-                            <div className="form-group">
-                                <input type="range" className="form-control-range" id="formControlRange" />
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td><Form>
-                            <Form.Check
-                                type="switch"
-                                id="custom-switch"
-                                label="Check this switch"
-                            />
-                        </Form></td>
-                        <td>
+                                            </Row>
+                                        )
+                                    })
+                                }
+                            </tr>
+                        )
+                    }
 
-                            <form>
-                                <div className="form-group">
-                                    <input type="range" className="form-control-range" id="formControlRange" />
-                                </div>
-                            </form>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td><Form>
-                            <Form.Check
-                                type="switch"
-                                id="custom-switch"
-                                label="Check this switch"
-                            />
-                        </Form></td>
-                        <td>
-                            <div className="form-group">
-                                <input type="range" className="form-control-range" id="formControlRange" />
-                            </div>
-
-                        </td>
-                    </tr>
+    
                 </tbody>
             </table>
         </div>

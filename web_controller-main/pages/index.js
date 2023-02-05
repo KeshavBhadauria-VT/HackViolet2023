@@ -3,11 +3,28 @@ import styles from "../styles/Home.module.css";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import Board from '../components/board';
+import {db} from '../config/firebase';
+import {setDoc, doc} from "firebase/firestore";
 
 
 const govee_key = "a1cc86f4-4677-42c6-b2c9-5d405d8997a5";
 
-const handleClickOn = () => {
+export const handleClickOn = (e) => {
+
+
+  if (!e.target.checked) {
+    const lampRef = doc(db, 'switches', e.target.value);
+    setDoc(lampRef, {State: "off"}, {merge: true});
+
+    handleClickOff();
+  }
+
+
+
+  console.log(e.target.value);
+  const lampRef = doc(db, 'switches', e.target.value);
+  setDoc(lampRef, {State: "on"}, {merge: true});
+
   const headers = {
     "content-type": "application/json",
     "Govee-API-Key": govee_key,
@@ -103,7 +120,7 @@ export default function Home() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
 
-        <main>
+        {/* <main>
           <h1 className={styles.title}>
             Welcome to <a href="https://nextjs.org">Lamp Control!</a>
           </h1>
@@ -122,7 +139,7 @@ export default function Home() {
               <p>Light will be turned off from now until 7am</p>
             </div>
           </div>
-        </main>
+        </main> */}
 
         <footer>
           <a>Powered by Saketh</a>
