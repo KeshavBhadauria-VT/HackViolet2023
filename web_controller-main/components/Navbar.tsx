@@ -8,11 +8,13 @@ const NavbarComp = () => {
   const { user, logout } = useAuth()
   const router = useRouter()
 
+  
+
   return (
     <Navbar bg="light" expand="lg">
       <Container>
         <Link href="/" passHref>
-          <Navbar.Brand>NextJS Firebase Auth</Navbar.Brand>
+          <Navbar.Brand>Power Down</Navbar.Brand>
         </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -39,7 +41,7 @@ const NavbarComp = () => {
                 <Link href="/newlamp" passHref>
                   <Navbar.Brand>Add Lamp</Navbar.Brand>
                 </Link>
-                <Link href="/profile" passHref>
+                <Link className='float-right' href="/profile" passHref>
                   <Navbar.Brand>User Profile</Navbar.Brand>
                 </Link>
               </div>

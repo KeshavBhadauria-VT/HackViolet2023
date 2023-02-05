@@ -5,6 +5,8 @@ import React, { useState, useEffect } from "react";
 import Board from '../components/board';
 import {db} from '../config/firebase';
 import {setDoc, doc} from "firebase/firestore";
+import { useRouter } from 'next/router';
+import {useAuth} from '../context/AuthContext';
 
 
 const govee_key = "a1cc86f4-4677-42c6-b2c9-5d405d8997a5";
@@ -30,7 +32,7 @@ export const handleClickOn = (e) => {
     "Govee-API-Key": govee_key,
   };
   const payload = {
-    device: "e1:66:34:20:03:6d:62:62",
+    device: e.target.value,
     model: "H5081",
     cmd: {
       name: "turn",
@@ -40,8 +42,7 @@ export const handleClickOn = (e) => {
   axios
     .put("https://developer-api.govee.com/v1/devices/control", payload, {
       headers,
-    })
-    .then((response) => console.log(response.data));
+    });
   // change a univerasl state that python script can acsess to tell it the curr state of lamp
   console.log("ON");
 };
@@ -62,13 +63,12 @@ const handleClickOff = () => {
   axios
     .put("https://developer-api.govee.com/v1/devices/control", payload, {
       headers,
-    })
-    .then((response) => console.log(response.data));
+    });
   // change a univerasl state that python script can acsess to tell it the curr state of lamp
   console.log("OFF");
 };
 
-const handleClickOffForNight = () => {
+export const handleClickOffForNight = () => {
   const headers = {
     "content-type": "application/json",
     "Govee-API-Key": govee_key,
@@ -96,6 +96,8 @@ const handleClickOffForNight = () => {
 };
 
 export default function Home() {
+  const { user } = useAuth();
+
   const [lastPong, setLastPong] = useState(null);
 
   return (
@@ -104,10 +106,12 @@ export default function Home() {
         <div className="col-md-5 p-lg-5 mx-auto my-5">
           <h1 className="display-4 fw-normal">Power Down</h1>
           <p className="lead fw-normal">
-            Join the hundreds who have saved a collective 50 grams of carbons
+            Join us as we try to save the planet one plug at a time
           </p>
-          <a className="btn btn-outline-secondary" href="/signup">
-            Sign Up
+
+          <a className="btn btn-outline-secondary" href={user ? "/profile": "/signup"}>
+            
+            {user ? "Go to Profile!": "Sign up"}
           </a>
         </div>
         <div className="product-device shadow-sm d-none d-md-block"></div>

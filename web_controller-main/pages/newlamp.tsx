@@ -2,9 +2,12 @@ import React, { useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
 import { addNewLamp } from '../config/firebase'
 import { useAuth } from '../context/AuthContext'
+import { useRouter } from 'next/router'
 
 
 const NewLamp = () => {
+  const router = useRouter()
+
 
   const { user, logout } = useAuth();
   const [data, setData] = useState({
@@ -21,6 +24,8 @@ const NewLamp = () => {
       //data.device, data.model, data.name
       // console.log(user);
       addNewLamp(data.device, data.model, data.name, user.email);
+
+      router.push('/dashboard');
 
 
       //TODO: create database lamp 
@@ -92,7 +97,7 @@ const NewLamp = () => {
 
 
         <Button variant="primary" type="submit">
-          Signup
+          Add Lamp
         </Button>
       </Form>
     </div>

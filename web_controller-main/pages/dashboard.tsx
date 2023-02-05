@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Form } from 'react-bootstrap'
-import { handleClickOn } from './index.js';
+import { handleClickOn, handleClickOffForNight } from './index.js';
 import { db } from '../config/firebase.js';
 import {
     Chart as ChartJS,
@@ -50,11 +50,7 @@ export const data = {
             data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
         },
-        {
-            label: 'Dataset 2',
-            data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-            backgroundColor: 'rgba(53, 162, 235, 0.5)',
-        },
+
     ],
 };
 
@@ -85,7 +81,7 @@ const Dashboard = () => {
         const [switchesRef, setSwitchesRef] = useState();
         console.log(props.id);
         // model={plug["Model"]} name={plug["Name"]} state={plug["State"]}
-        
+
         useEffect(() => {
             async function fetchSwitches() {
                 const switchDocRef = doc(db, "switches", props.id);
@@ -111,6 +107,7 @@ const Dashboard = () => {
                             type="switch"
                             id="custom-switch"
                             label="Check this switch"
+                            defaultChecked={switchesRef["State"] == "on"}
                         />
                     </Form>
                 </td>
@@ -119,6 +116,13 @@ const Dashboard = () => {
                     <div className="form-group">
                         <input type="range" className="form-control-range" id="formControlRange" />
                     </div>
+
+                </td>
+                <td>
+
+                    <button onClick={handleClickOffForNight} className='btn btn-outline-dark'>
+                        GoodNight
+                    </button>
                 </td>
             </>
 
@@ -143,27 +147,31 @@ const Dashboard = () => {
                         <th scope="col">Model</th>
                         <th scope="col">Status</th>
                         <th scope="col">Distance</th>
+                        <th scope="col">Turn off for tonight</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
                         userRef["Plugs"][0] && (
-                            <tr>
+                            <>
                                 {
                                     userRef["Plugs"].map((plug, index) => {
-                                        
-                                        return (
-                                            <Row key={index} id={plug.id}>
 
-                                            </Row>
+
+                                        return (
+                                            <tr>
+                                                <Row key={index} id={plug.id}>
+
+                                                </Row>
+                                            </tr>
                                         )
                                     })
                                 }
-                            </tr>
+                            </>
                         )
                     }
 
-    
+
                 </tbody>
             </table>
         </div>
