@@ -4,9 +4,13 @@ import styles from '../styles/profile.module.css'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { db } from '../config/firebase';
-import { doc, getDoc, collection, getDocs, setDoc } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import { Button, Form } from 'react-bootstrap'
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+
+
+
 
 export const data = {
     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
@@ -58,16 +62,43 @@ const RenderCard = (props) => {
 
 }
 
-const Profile = () => {
-
-
+export const Profile = (props) => {
     const { user, logout } = useAuth()
+
+    const handleFriendAdd = async (e: any) => {
+        e.preventDefault()
+        console.log("here");
+    
+        try {
+            const userDocRef = doc(db, "users", user.email);
+            const friendDocRef = doc(db, "users", props.id);
+
+            updateDoc(userDocRef, {
+                Friends: arrayUnion(friendDocRef)
+            });
+
+    
+    
+          //
+        } catch (err) {
+          console.log(err)
+        }
+    
+        console.log(data)
+      }
+
+
     const [userRef, setUserRef] = useState({ Plugs: [], Friends: [] });
 
     useEffect(() => {
 
         async function fetchUser() {
-            const userDocRef = doc(db, "users", user.email);
+            let value = user.email;
+            if (props.id !== undefined) {
+                value = props.id;
+            }
+            // console.log(value);
+            const userDocRef = doc(db, "users", value);
             const docSnap = await getDoc(userDocRef);
             setUserRef(docSnap.data());
 
@@ -125,11 +156,15 @@ const Profile = () => {
                                 </p>
 
                             </div>
+                            {props.id !== undefined && props.id !== user.email &&
+                             userRef["Friends"].indexOf(`/users/${props.id}`) <= -1 &&<div className='col-4 float-right d-flex justify-content-center align-items-center'>
+                                <Form onSubmit={handleFriendAdd}>
+                                <button type="submit" className="btn btn-primary btn-lg" >Add Friend</button>
 
-                            <div className='col-4 float-right d-flex justify-content-center align-items-center'>
-                                <button type="button" className="btn btn-primary btn-lg">Add Friend</button>
+                                </Form>
 
-                            </div>
+                            </div>}
+                            
 
                         </div>
                     </div>
