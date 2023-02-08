@@ -11,14 +11,14 @@ import { getFirestore, doc, setDoc, collection, addDoc, updateDoc, arrayUnion, a
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDjCsfs6peBjaM-dcrqeCXiwMvHqj6Xi9c",
-  authDomain: "hackviolet-2023.firebaseapp.com",
-  databaseURL: "https://hackviolet-2023-default-rtdb.firebaseio.com",
-  projectId: "hackviolet-2023",
-  storageBucket: "hackviolet-2023.appspot.com",
-  messagingSenderId: "16834181310",
-  appId: "1:16834181310:web:8ed32f6101b7b47b9c46ef",
-  measurementId: "G-5HY2F0B1F1"
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
+  measurementId: ""
 };
 
 // Initialize Firebase
